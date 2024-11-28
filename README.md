@@ -1,14 +1,14 @@
 ### Hva gjorde vi i dag.
 
-<li>
-    <ul>
+<ul>
+    <li>
         Vi hentet inn data fra flere filer, og lagret de i en felles datacontext, slik at vi hadde en lett måte å referere til de på senere.
-    </ul>
-    <ul>
+    </li>
+    <li>
         Vi brukte LinQ for å gjøre komplekte spørringer med GroupBy og SelectMany.
-    </ul>
-    <ul>
+    </li>
+    <li>
         Vi kryssrefererte mellom de forskjellige datasettene i vår datacontext for å filtrere data, 
         ved å lage komplekse Lambda funksjoner.
-    </ul>
-</li>
+    </li>
+</ul>
