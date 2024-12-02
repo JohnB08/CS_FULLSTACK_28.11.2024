@@ -9,6 +9,17 @@ internal class Program
         //Vi henter inn en ny DataContext med all data vi trenger. 
         var context = new DataContext();
         /* var result = GetFrequencyOfGenre(context); */
+        //Vi prøver å lese av et brukernavn, og prøver å generere en stats for denne brukeren for alle filmer i Movies.json
+        Console.WriteLine("What is your name?");
+        string userName = "";
+        //Pass på at userName ikke er null;
+        while (string.IsNullOrEmpty(userName))
+        {
+            userName = Console.ReadLine();
+        }
+        context.Users.Add(userName);
+
+        Console.WriteLine($"Welcome {userName}, You have a relation to {context.Users[userName].Count} movies");
         /* var result = GetTopTenMovies(context); */
         var result = GetMostAwardWinningGenre(context);
         SaveObjectAsJson(result);
@@ -43,24 +54,6 @@ internal class Program
                             .ToList();
     }
 
-    //Lage en funksjon som returnerer de 10 beste filmene i følger userStats
-    public static  List<Movie> GetTopTenMovies(DataContext context)
-    {
-        return context.Movies.Where(
-            movie => 
-            //Vi lager en lambdafunksjon hvor vi kryssrefererer mot UserMoviestats.
-            context.UserMovieStats
-            //Vi bruker OrderByDescending for å sortere UserMovieStats basert på rating, høyest rating først.
-                .OrderByDescending(stat => stat.Rating)
-                //Vi tar med videre tittelen for hver rating.
-                .Select(stat => stat.Title)
-                //Vi tar 10 elementer.
-                .Take(10)
-                //Vi ser om listen av ti elementer inneholder tittelen til vårt movie parameter.
-                .Contains(movie.Title))
-            //Vi returnerer resultatet til en liste over filmer.
-            .ToList();
-    }
     //En funksjon som returnerer hvilke sjanger som vinner best picture flest ganger.
     public static object GetMostAwardWinningGenre(DataContext context)
     {

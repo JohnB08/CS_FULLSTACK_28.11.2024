@@ -1,4 +1,4 @@
-using System.Net.Http.Headers;
+
 using System.Text.Json;
 using CS_FULLSTACK_28._11._2024.Models;
 
@@ -10,7 +10,8 @@ public class DataContext
 {
     public List<Movie> Movies;
     public List<BestPicture> BestPictures;
-    public List<UserMovieStats> UserMovieStats;
+
+    public UserDictionary Users;
     //Vi bruker konstruktoren for å passe på at all data fra filer kommer inn i rett format. 
     public DataContext()
     {
@@ -35,19 +36,15 @@ public class DataContext
                 Year = result
             };
         }).ToList();
-
-        //Vi genererer en liste av UserMovieStats objekter for hver instans av Movie i Movies.
-        UserMovieStats = Movies.Select(movie => new UserMovieStats()
+        Users = new UserDictionary(Movies);
+    }
+    public class UserDictionary(List<Movie> movies) : Dictionary<string, List<UserMovieStats>>
+    {
+        private readonly List<UserMovieStats> _movieStats = movies.Select(movie => new UserMovieStats() { Title = movie.Title }).ToList();
+        public void Add(string name)
         {
-            Title = movie.Title
-        }).ToList();
-
-        //Vi velger ca 30% av alle UserMovieStats objektene våre, og gir de HasSeen = true, og en random rating mellom 0 - 10.
-        var randomizer = new Random();
-        foreach (var item in UserMovieStats.OrderBy(_ => Guid.NewGuid()).Take((int)(UserMovieStats.Count * 0.3)))
-        {
-            item.HasSeen = true;
-            item.Rating = randomizer.NextDouble() * 10;
+            if (ContainsKey(name)) return;
+            this[name] = _movieStats;
         }
     }
 }
